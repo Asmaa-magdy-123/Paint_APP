@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <link rel="stylesheet" href="css/future.css">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/all.min.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<style>
+
+#height, #lh{
+    display: none;
+}
+
+</style>
+</head>
+<body>
+    
+    <div class="d-flex justify-content-start">
+    <nav class="nav flex-column p-3 me-5 options">
+        <!-- <button class="nav-link btn"  ><i class="fa-solid fa-up-down-left-right"></i></button> -->
+        <!-- <button class="nav-link btn"><i class="fa-solid fa-maximize"></i></button> -->
+        <button class="nav-link btn tool active " id="pen"><i class="fa-solid fa-pencil" ></i></button>
+        <button class="nav-link btn tool  " id="eraser"><i class="fa-solid fa-eraser"></i></button>
+        <button class="nav-link btn tool " id="triangle"><i class="fa-solid fa-caret-up" width="50px" height="30px" ></i></button>
+        <button class="nav-link btn tool "  id="circle"><i class="fa-solid fa-circle"></i></button>
+        <button class="nav-link btn tool " id="rect"><i class="fa-solid fa-square" ></i></button>
+
+        <button class="nav-link btn tool " id="cloud" ><i class="fa-solid fa-cloud"  ></i></button>
+        <button class="nav-link btn tool " id="wood"><i  class="fa-solid fa-lines-leaning"></i></button>
+        <button class="nav-link btn tool " id="fill"><i class="fa-solid fa-fill" ></i></button>
+
+        </nav>
+
+
+        
+        
+        <div class="can d-flex align-items-center flex-column mb-3 ms-5">
+
+            <div class="mb-3 mt-3">
+        <label for=""> line color</label>
+        <input type="color" name="" id="color" class="me-3">
+        
+        <label for=""> line width</label>
+        <input type="number" name="" id="width" class="w-25 me-3" value="">
+
+        <label for="" id="lh"> line height</label>
+        <input type="number" name="" id="height" class="w-25 me-3" value="">
+        
+        <button type="reset" class="btn btn-secondary" id="clear">Clear</button>
+        </div>
+
+        <canvas id="canvas" width="560" height="360"></canvas>
+    </div>
+        </div>
+
+
+
+
+
+
+
+
+
+
+
+        <script type="text/javascript" src="https://code.jquery.com/jquery.min.js"></script> 
+
+        <script>
+
+            var x = 0;
+            var y = 0;
+            var isdrawing = false;
+            var w= document.getElementById("width");
+            var h= document.getElementById("height");
+            var lh= document.getElementById("lh");
+            var c= document.getElementById("color");
+            var wood= document.getElementById("wood");
+            // var cloud= document.getElementById("cloud");
+            var clear= document.getElementById("clear");
+  
+            var btns = document.querySelectorAll(".tool");
+  
+            var selectedtool = "pen";
+
+            let prevMouseX,prevMouseY, snapshot;
+  
+            const canvas = document.getElementById("canvas");
+            const ctx = canvas.getContext("2d");
+
+            window.addEventListener('load', () => {
+                canvas.width = canvas.offsetWidth;
+                canvas.height = canvas.offsetHeight;
+            });
+
+            btns.forEach(btn => {
+                btn.addEventListener("click", () => {
+                    console.log(btn.id);
+
+                    document.querySelector(".options .active").classList.remove("active");
+
+                    btn.classList.add("active");
+
+                    selectedtool = btn.id;
+                    console.log(selectedtool);
+                });
+            });
+
+             
+            
+            
+
+//             function draw(){
+                
+                
+               
+
+//             canvas.addEventListener("mousedown", (e) => {
+//             //    x = e.offsetX;
+//             //    y = e.offsetY;
+//             //    isdrawing = true;
+//             startDraw(e);
+//             });
+//             canvas.addEventListener("mousemove" ,(e) =>{
+//                if(isdrawing === true){
+//                   drawLine(x, y, e.offsetX, e.offsetY);
+//                   x = e.offsetX;
+//                   y = e.offsetY;
+//                }
+//             });
+//             canvas.addEventListener("mouseup" ,(e) => {
+//                if( isdrawing === true){
+//                   drawLine(x, y, e.offsetX, e.offsetY);
+//                   x = 0;
+//                   y = 0;
+//                   isdrawing = false;
+                  
+//                }
+//             });
+  
+//       w.addEventListener("change", function () {
+//       ctx.lineWidth = w.value;
+//   });
+  
+//   clear.addEventListener("click",function(){
+  
+//   ctx.clearRect(0,0,560,360);
+  
+//   })
+  
+//             function drawLine(x1, y1, x2, y2){
+//                ctx.beginPath();
+//                ctx.strokeStyle = c.value;
+//                ctx.lineWidth = w.value;
+//                ctx.moveTo(x1, y1);
+//                ctx.lineTo(x2, y2);
+//                ctx.stroke();
+//                ctx.closePath();
+//             }
+
+//         }
+            
+
+            
+            // document.body.style.cursor = "";
+            //  flag = false;
+         
+// function drawCircle(){
+
+
+
+
+
+// 	$(function(){/*from   ww w  .j  a  v  a2s.c o m*/
+	
+// 		var canvasOffset=$("#canvas").offset();
+// 		var offsetX=canvasOffset.left;
+// 		var offsetY=canvasOffset.top;
+// 		var startX;
+// 		var startY;
+// 		var isDown=false;
+// 		function drawOval(x,y){
+// 			ctx.clearRect(0,0,canvas.width,canvas.height);
+// 			ctx.beginPath();
+// 			ctx.moveTo(startX, startY + (y-startY)/2);
+// 			ctx.bezierCurveTo(startX, startY, x, startY, x, startY + (y-startY)/2);
+// 			ctx.bezierCurveTo(x, y, startX, y, startX, startY + (y-startY)/2);
+// 			 ctx.closePath();
+// 			ctx.stroke();
+// 		}
+// 		function handleMouseDown(e){
+// 		  e.preventDefault();
+// 		  e.stopPropagation();
+// 		  startX=parseInt(e.clientX-offsetX);
+// 		  startY=parseInt(e.clientY-offsetY);
+// 		  isDown=true;
+// 		}
+// 		function handleMouseUp(e){
+// 		  if(!isDown){ return; }
+// 		  e.preventDefault();
+// 		  e.stopPropagation();
+// 		  isDown=false;
+// 		}
+
+//         // document.getElementById("myBtn").addEventListener("click", displayDate);
+// 		function handleMouseOut(e){
+// 		  if(!isDown){ return; }
+// 		  e.preventDefault();
+// 		  e.stopPropagation();
+// 		  isDown=false;
+// 		}
+// 		function handleMouseMove(e){
+// 		  if(!isDown){ return; }
+// 		  e.preventDefault();
+// 		  e.stopPropagation();
+// 		  mouseX=parseInt(e.clientX-offsetX);
+// 		  mouseY=parseInt(e.clientY-offsetY);
+// 		  drawOval(mouseX,mouseY);
+// 		}
+// 		$("#canvas").mousedown(function(e){handleMouseDown(e);});
+// 		$("#canvas").mousemove(function(e){handleMouseMove(e);});
+// 		$("#canvas").mouseup(function(e){handleMouseUp(e);});
+// 		$("#canvas").mouseout(function(e){handleMouseOut(e);});
+// 	}); // end $(function(){});
+// }
+		  
+
+const drawRect = (e) => {
+    ctx.fillStyle = c.value;
+
+ ctx.strokeRect(e.offsetX, e.offsetY, prevMouseX-e.offsetX, prevMouseY-e.offsetY);
+ctx.fill();
+ ctx.fillRect(e.offsetX, e.offsetY, prevMouseX-e.offsetX, prevMouseY-e.offsetY);
+  
+}
+
+// function drawCloud(){
+
+
+
+//     var transformedX =0;
+// var transformedY =0;
+
+// 	function getTransformedPoint(x, y) {
+//    transform = ctx.getTransform(); 
+//    transformedX = x - transform.e; 
+//    transformedY = y - transform.f;
+//   return {  transformedX,  transformedY };
+// }
+
+//  //We can use our function with a canvas event
+// canvas.addEventListener('mousedown', event => {
+//   const transformedCursorPosition = getTransformedPoint(event.offsetX, event.offsetY);
+//   console.log(transformedCursorPosition);
+
+
+
+// 	var t=32;
+// 	var canvas=document.getElementById("canvas");
+// 	var ctx=canvas.getContext("2d");
+// 	ctx.beginPath();
+// 	ctx.strokeStyle = 'red';
+//     ctx.lineWidth = 10;
+// 	ctx.fillStyle= c.value;
+	
+//     // ctx.rect(10,60,30,30);
+// 	ctx.arc(transformedX,transformedY,t,0,2*Math.PI);
+// 	ctx.arc(transformedX +63, transformedY - 12 ,t+10,0,2*Math.PI);
+// 	ctx.arc(transformedX +116,transformedY,t,0,2*Math.PI);
+// 	// ctx.arc(30,80,20,0,2*Math.PI);
+// 	ctx.fillRect(transformedX - 11,transformedY,120,31);
+// 	ctx.fill();
+// });
+
+// }
+
+// cloud.addEventListener("click", function(){
+    let transformedX =0;
+let transformedY =0;
+
+    const drawCloud = () => {
+
+
+
+// 	function getTransformedPoint(x, y) {
+//    transform = ctx.getTransform(); 
+//    transformedX = x - transform.e; 
+//    transformedY = y - transform.f;
+//   return {  transformedX,  transformedY };
+// }
+
+ //We can use our function with a canvas event
+
+// canvas.addEventListener('mousedown', event => {
+//   const transformedCursorPosition = getTransformedPoint(event.offsetX, event.offsetY);
+//   console.log(transformedCursorPosition);
+ 
+	var t=42;
+	// var canvas=document.getElementById("canvas");
+	// var ctx=canvas.getContext("2d");
+	// ctx.beginPath();
+	// ctx.strokeStyle = 'red';
+    // ctx.lineWidth = 10;
+	 ctx.fillStyle= c.value;
+	
+    // ctx.rect(10,60,30,30);
+	ctx.arc(transformedX,transformedY,t,0,2*Math.PI);
+	ctx.arc(transformedX +63, transformedY - 12 ,t+10,0,2*Math.PI);
+	ctx.arc(transformedX +116,transformedY,t,0,2*Math.PI);
+	// ctx.arc(30,80,20,0,2*Math.PI);
+	ctx.fillRect(transformedX - 11,transformedY,120,31);
+	ctx.fill();
+
+
+}
+
+
+ 
+ 
+ 
+function drawLeaf(){
+
+}
+
+const drawWood = (e) => {
+
+lh.style.display= "inline-block";
+h.style.display= "inline-block";
+
+//     canvas.addEventListener("click", function(event){
+
+// let x = event.offsetX;
+// let  y = event.offsetY;
+
+// // draw an unrotated reference rect
+// // draw a rotated rect
+
+
+// function drawRotatedRect(x,y,width,height){
+ ctx.fillStyle= c.value;
+// ctx.beginPath();
+
+      ctx.rect( prevMouseX, prevMouseY, w.value,h.value);
+
+    
+ ctx.fill();
+ ctx.stroke();
+//  }
+//  drawRotatedRect(x,y,w.value,h.value);
+
+// });
+}
+
+// wood.addEventListener("click",function(){
+
+   
+
+    // canvas.addEventListener("click", function(event){
+
+// let x = event.offsetX;
+// let  y = event.offsetY;
+
+// draw an unrotated reference rect
+// draw a rotated rect
+
+
+const drawCircle = () => {
+    ctx.beginPath();
+
+    ctx.arc(prevMouseX, prevMouseY, 10,0, 180);
+    ctx.strokeStyle = c.value;
+    ctx.fillStyle = c.value;
+    
+    ctx.stroke();
+    ctx.fill();
+    
+    
+}
+const drawTriangle = (e) => {
+ctx.beginPath();
+ctx.moveTo(prevMouseX, prevMouseY);
+ctx.lineTo(e.offsetX, e.offsetY);
+ctx.lineTo(prevMouseX * 2 - e.offsetX, e.offsetY);
+ctx.closePath();
+ctx.strokeStyle = w.value;
+ctx.stroke();
+ctx.fillStyle = c.value;
+ctx.fill();
+}
+
+
+
+const fillCanvas = () => {
+canvas.style.backgroundColor= c.value;
+    
+}
+
+// const clear = (e) => {
+//     ctx.clearRect(0,0, 560, 360);
+// }
+
+const startDraw = (e) =>{
+    isdrawing= true;
+    prevMouseX = e.offsetX;
+    prevMouseY = e.offsetY;
+
+    transform = ctx.getTransform();
+   transformedX = e.offsetX- transform.e; 
+   transformedY = e.offsetY - transform.f;
+
+    ctx.beginPath();
+    ctx.lineWidth= w.value;
+    snapshot = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    
+}
+const drawing = (e) => {
+    if(!isdrawing) return;
+    
+    ctx.putImageData(snapshot, 0, 0);
+
+    if(selectedtool === "pen"){
+        ctx.lineTo(e.offsetX, e.offsetY);
+        ctx.stroke();
+        ctx.strokeStyle= c.value;
+    }
+    else  if(selectedtool === "rect"){
+        drawRect(e);
+    }
+    else if( selectedtool === "cloud"){
+        drawCloud();
+    }
+    else if( selectedtool === "wood"){
+        drawWood(e);
+    }
+    else if( selectedtool === "fill"){
+        fillCanvas();
+    }
+    else if( selectedtool === "circle"){
+        drawCircle();
+    }
+    else if( selectedtool === "triangle"){
+        drawTriangle(e);
+    }
+    else if( selectedtool === "eraser"){
+        ctx.lineTo(e.offsetX, e.offsetY);
+        
+        ctx.strokeStyle= "white";
+        ctx.stroke();
+    }
+   
+
+}
+
+canvas.addEventListener("mousedown", startDraw);
+canvas.addEventListener("mousemove", drawing);
+canvas.addEventListener("mouseup", () => isdrawing= false);
+
+
+clear.addEventListener("click", () => {
+    ctx.clearRect(0, 0, 560, 360);
+});
+
+
+
+
+
+
+
+
+
+		  </script> 
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+
+
+
+
+
+
+    <script src="js/all.min.js"></script>
+    <script src="js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
